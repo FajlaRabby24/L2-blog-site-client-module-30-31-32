@@ -1,12 +1,14 @@
 import { cookies } from "next/headers";
 
+const AUTH_URL = process.env.AUTH_URL;
+
 export const userSerive = {
   geSession: async () => {
     try {
       const cookieStore = await cookies();
       // console.log(cookieStore.get("__next_hmr_refresh_hash__"));
 
-      const res = await fetch(`http://localhost:5000/api/auth/get-session`, {
+      const res = await fetch(`${AUTH_URL}/get-session`, {
         headers: {
           Cookie: cookieStore.toString(),
         },
