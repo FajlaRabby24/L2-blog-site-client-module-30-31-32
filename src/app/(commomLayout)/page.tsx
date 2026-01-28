@@ -1,18 +1,22 @@
 import { BlogCard } from "@/components/modules/homepage/BlogCard";
-import { blogService } from "@/services/blogService";
+import { commentService } from "@/services/commentService";
 import { BlogPost } from "@/types";
 
 export default async function Home() {
-  const { data } = await blogService.getBlogPosts(
-    {
-      isFeatured: true,
-      search: "",
-    },
-    {
-      cache: "no-store",
-      // revalidate: 10,
-    },
-  );
+  // const { data } = await blogService.getBlogPosts(
+  //   {
+  //     isFeatured: true,
+  //     search: "",
+  //   },
+  //   {
+  //     cache: "no-store",
+  //     // revalidate: 10,
+  //   },
+  // );
+
+  const { data } = await commentService.getComments({
+    status: "APPROVED",
+  });
 
   return (
     <div className="pt-10 grid grid-cols-3 max-w-7xl mx-auto px-4 gap-5">

@@ -23,7 +23,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
         <CardAction>
           <Badge variant="secondary">Featured</Badge>
         </CardAction>
-        <CardTitle>{post.title}</CardTitle>
+        <CardTitle>{post.content}</CardTitle>
         <CardDescription>
           A practical talk on component APIs, accessibility, and shipping
           faster.
