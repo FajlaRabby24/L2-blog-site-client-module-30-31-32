@@ -83,4 +83,35 @@ export const blogService = {
       };
     }
   },
+
+  getBlogById: async (id: string) => {
+    try {
+      const res = await fetch(`${env.API_URL}/api/posts/${id}`);
+      const data = await res.json();
+
+      if (!data.success) {
+        return {
+          success: false,
+          data: null,
+          error: {
+            message: "Something went wrong!",
+          },
+        };
+      }
+
+      return {
+        success: true,
+        data,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        data: null,
+        error: {
+          message: "Something went wrong!",
+        },
+      };
+    }
+  },
 };

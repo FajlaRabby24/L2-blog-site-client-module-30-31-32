@@ -12,7 +12,6 @@ import { BlogPost } from "@/types";
 import Link from "next/link";
 
 export function BlogCard({ post }: { post: BlogPost }) {
-  console.log(post);
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0 ">
       <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
