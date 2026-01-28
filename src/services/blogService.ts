@@ -3,7 +3,14 @@ import { env } from "@/env";
 export const blogService = {
   getBlogPosts: async () => {
     try {
-      const res = await fetch(`${env.API_URL}/api/posts`);
+      // ? when try to data don't cache
+      // const res = await fetch(`${env.API_URL}/api/posts`, {
+      //   cache: "no-store",
+      // });
+
+      const res = await fetch(`${env.API_URL}/api/posts`, {
+        next: { revalidate: 10 },
+      });
 
       const data = await res.json();
 
