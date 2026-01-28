@@ -13,7 +13,7 @@ export const dynamicParams = true; // true | false
 export async function generateStaticParams() {
   const { data } = await blogService.getBlogPosts();
 
-  return data?.data?.map((blog: BlogPost) => ({ id: blog.id })).splice(0, 3);
+  return data?.map((blog: BlogPost) => ({ id: blog.id })).splice(0, 3);
 }
 
 const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -23,17 +23,14 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { data: blog } = await blogService.getBlogById(id);
 
-  const formattedDate = new Date(blog?.data?.createdAt).toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    },
-  );
+  const formattedDate = new Date(blog?.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   // Estimate reading time (average 200 words per minute)
-  const wordCount = blog?.data?.content?.split(/\s+/).length;
+  const wordCount = blog?.content?.split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
   return (
@@ -41,7 +38,7 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
       {/* Header */}
       <header className="mb-8">
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-4">
-          {blog?.data?.title}
+          {blog?.title}
         </h1>
 
         <div className="flex items-center gap-3 text-muted-foreground text-sm">
@@ -49,7 +46,7 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
           <span>·</span>
           <span>{readingTime} min read</span>
           <span>·</span>
-          <span>{blog?.data?.views} views</span>
+          <span>{blog?.views} views</span>
         </div>
       </header>
 
@@ -57,18 +54,16 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       {/* Content */}
       <div className="prose prose-lg dark:prose-invert max-w-none leading-relaxed text-foreground">
-        <p className="whitespace-pre-wrap text-lg leading-8">
-          {blog?.data?.content}
-        </p>
+        <p className="whitespace-pre-wrap text-lg leading-8">{blog?.content}</p>
       </div>
 
       <Separator className="my-8" />
 
       {/* Footer */}
       <footer className="space-y-6">
-        {blog?.data?.tags && blog?.data?.tags?.length > 0 && (
+        {blog?.tags && blog?.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {blog?.data?.tags?.map((tag: string) => (
+            {blog?.tags?.map((tag: string) => (
               <Badge
                 key={tag}
                 variant="secondary"
