@@ -3,7 +3,16 @@ import { blogService } from "@/services/blogService";
 import { BlogPost } from "@/types";
 
 export default async function Home() {
-  const { data } = await blogService.getBlogPosts();
+  const { data } = await blogService.getBlogPosts(
+    {
+      isFeatured: true,
+      search: "",
+    },
+    {
+      cache: "no-store",
+      // revalidate: 10,
+    },
+  );
 
   return (
     <div className="pt-10 grid grid-cols-3 max-w-7xl mx-auto px-4 gap-5">

@@ -6,17 +6,55 @@ import { env } from "@/env";
  * next: {revalidate: 10}: ISR -> Mix between static and dynamic
  */
 
+interface ServiceOptions {
+  cache?: RequestCache;
+  revalidate?: number;
+}
+
+interface GetBlogsParams {
+  isFeatured?: boolean;
+  search?: string;
+}
+
 export const blogService = {
-  getBlogPosts: async () => {
+  getBlogPosts: async (params?: GetBlogsParams, options?: ServiceOptions) => {
     try {
       // ? when try to data don't cache
       // const res = await fetch(`${env.API_URL}/api/posts`, {
       //   cache: "no-store",
       // });
 
-      const res = await fetch(`${env.API_URL}/api/posts`, {
-        next: { revalidate: 10 },
-      });
+      // ? data revalidate update 10 second
+      // const res = await fetch(`${env.API_URL}/api/posts`, {
+      //   next: { revalidate: 10 },
+      // });
+
+      const url = new URL(`${env.API_URL}/api/posts`);
+
+      // url.searchParams.append("key", "value");
+      // url.searchParams.append("hello", "world");
+
+      // console.log(Object.entries(params));
+
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.append(key, value);
+          }
+        });
+      }
+
+      const config: RequestInit = {};
+
+      if (options?.cache) {
+        config.cache = options.cache;
+      }
+
+      if (options?.revalidate) {
+        config.next = { revalidate: options.revalidate };
+      }
+
+      const res = await fetch(url.toString(), config);
 
       const data = await res.json();
 
