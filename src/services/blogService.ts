@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { cookies } from "next/headers";
 
 /*
  * No Dynamic and No {cache: no-store} : SSG -> Static Page
@@ -14,6 +15,12 @@ interface ServiceOptions {
 interface GetBlogsParams {
   isFeatured?: boolean;
   search?: string;
+}
+
+export interface IBlogData {
+  title: string;
+  content: string;
+  tags?: string[];
 }
 
 export const blogService = {
@@ -114,6 +121,37 @@ export const blogService = {
           message: "Something went wrong!",
         },
       };
+    }
+  },
+
+  // create blog posts
+  createBlogPost: async (blogData: IBlogData) => {
+    try {
+      const cookieStore = await cookies();
+
+      const res = await fetch(`${env.API_URL}/api/posts`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Cookie: cookieStore.toString(),
+        },
+        body: JSON.stringify(blogData),
+      });
+
+      const data = await res.json();
+
+      if (data?.error) {
+        return {
+          data: null,
+          error: {
+            message: "Error: Post not created.",
+          },
+        };
+      }
+
+      return { data, error: null };
+    } catch (error) {
+      return { data: null, error: { message: "Something went wrong!" } };
     }
   },
 };

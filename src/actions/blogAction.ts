@@ -1,10 +1,15 @@
 "use server";
 
-import { blogService } from "@/services/blogService";
+import { blogService, IBlogData } from "@/services/blogService";
+import { updateTag } from "next/cache";
 
 export const getBlogs = async () => {
-  console.log("get blogs");
   const data = await blogService.getBlogPosts();
-  console.log("action", data);
   return data;
+};
+
+export const createBlogPost = async (data: IBlogData) => {
+  const result = await blogService.createBlogPost(data);
+  updateTag("blogPosts");
+  return result;
 };
