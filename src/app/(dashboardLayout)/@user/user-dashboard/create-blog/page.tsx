@@ -1,5 +1,11 @@
+import CreateBlogFormServer from "@/components/modules/user/createBlog/createBlogFormServer";
+
 const CreateBlogPage = () => {
-  return <div>this is create blog page</div>;
+  return (
+    <div>
+      <CreateBlogFormServer />
+    </div>
+  );
 };
 
 export default CreateBlogPage;
